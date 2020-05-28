@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include "lz77.h"
 
+
 unsigned char block1[] = "Alice was beginning to get very tired of sitting by her sister on the bank, \n"
         "and of having nothing to do: once or twice she had peeped into the book her sister was reading, \n"
         "but it had no pictures or conversations in 'and what is the use of a book,' thought Alice \n"
