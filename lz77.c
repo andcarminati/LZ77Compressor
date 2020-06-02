@@ -26,8 +26,7 @@ static void bitmap_set(unsigned char* bitmap, int bit_number, unsigned char bit)
 }
 
 static unsigned char bitmap_get(unsigned char* bitmap, int bit_number) {
-    unsigned char byte = *bitmap;
-    return (byte & 1 << bit_number) >> bit_number;
+    return (*bitmap & 1 << bit_number) >> bit_number;
 }
 
 static int find_prefix(int* size, int w_start, int w_end, int start, int end, unsigned char* in_data) {
@@ -113,14 +112,12 @@ int encode(int size_in, unsigned char* in_data, int size_buffer_out, unsigned ch
 
 int decode(int size_in, unsigned char* in_data, int size_buffer_out, unsigned char* buffer_out) {
     int read_pos = 0, write_pos = 0, code_count = 0;
-    int k;
     unsigned char* bitmap;
 
     bitmap = &in_data[read_pos++];
 
     while (read_pos < size_in) {
-        int old_pos = write_pos;
-        int i = 0, l = 0;
+        int old_pos = write_pos, i = 0, l = 0, k;
         unsigned char c = in_data[read_pos++];
         if (bitmap_get(bitmap, code_count) == COMPLETE_CODE) {
             i = in_data[read_pos++];
@@ -131,7 +128,7 @@ int decode(int size_in, unsigned char* in_data, int size_buffer_out, unsigned ch
         if ((write_pos + l + 1) > size_buffer_out) {
             return 0; // out of memory
         }
-        for (k = old_pos - i - 1; k < old_pos - i + l - 1; k++) {
+        for (k = (old_pos - i - 1); k < (old_pos - i + l - 1); k++) {
             buffer_out[write_pos++] = buffer_out[k];
         }
         buffer_out[write_pos++] = c;
